@@ -30,6 +30,11 @@
     gh = {
       enable = true;
     };
+     direnv = {
+      enable = true;
+      enableBashIntegration = true;
+      nix-direnv.enable = true;
+    };
     neovim = {enable= true;defaultEditor=true;};
   };
 
