@@ -19,6 +19,10 @@
 	    system.stateVersion = "25.05";
 	    wsl.enable = true;
 
+	     environment.variables = {
+              EDITOR = "nvim";
+            };
+
 	    home-manager.useGlobalPkgs = true;
 	    home-manager.useUserPackages = true;
 	    home-manager.users.nixos = ./home.nix;
