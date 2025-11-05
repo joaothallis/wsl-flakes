@@ -40,7 +40,13 @@
           set-option -a terminal-features 'xterm-256color:RGB'
 	  '';
     };
-    neovim = {enable= true;defaultEditor=true;};
+    neovim = {enable= true;defaultEditor=true;
+      extraLuaConfig = ''
+        local o = vim.o
+
+        o.clipboard = "unnamedplus"
+      '';
+    };
   };
 
   # Let Home Manager install and manage itself.
