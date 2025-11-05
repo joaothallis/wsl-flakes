@@ -35,6 +35,11 @@
       enableBashIntegration = true;
       nix-direnv.enable = true;
     };
+    tmux = {enable= true; escapeTime= 10; focusEvents=true; terminal="screen-256color";
+          extraConfig = ''
+          set-option -a terminal-features 'xterm-256color:RGB'
+	  '';
+    };
     neovim = {enable= true;defaultEditor=true;};
   };
 
