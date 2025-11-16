@@ -55,6 +55,9 @@
     };
   };
 
+
+  home.packages = [pkgs.nodePackages.nodejs pkgs.nixfmt-rfc-style];
+
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 }
