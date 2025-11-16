@@ -24,8 +24,13 @@
           verbose = true;
         };
       user.name = "João Thallis";
-      user.email = "joaothallis@icloud.com";
-      };
+      user.email = "joaothallis.developer@gmail.com";
+    };
+     ignores = [
+        ".direnv"
+        ".envrc"
+        "**/.claude/settings.local.json"
+      ];
     };
     gh = {
       enable = true;
