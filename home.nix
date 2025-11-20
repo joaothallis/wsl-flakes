@@ -81,7 +81,7 @@
           type = "lua";
           config = ''
             		vim.lsp.config('expert', {
-            		  cmd = { '/Users/joao/.local/bin/expert', '--stdio' },
+            		  cmd = { '/home/nixos/.local/bin/expert', '--stdio' },
             		  root_markers = { 'mix.exs', '.git' },
             		  filetypes = { 'elixir', 'eelixir', 'heex' },
             		})
