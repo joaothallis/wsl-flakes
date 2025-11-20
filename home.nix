@@ -41,6 +41,18 @@
       nix-direnv.enable = true;
     };
     bash.enable = true;
+    bash.shellAliases = {
+      gs = "git status";
+      gd = "git diff";
+      gl = "git pull --prune";
+      gp = "git push";
+      glog = "git log --oneline";
+      gc = "git commit --patch";
+      gca = "git commit --patch --amend";
+      mf = "mix format";
+      mc = "mix credo --strict";
+      md = "mix dialyzer";
+    };
     tmux = {
       enable = true;
       escapeTime = 10;
