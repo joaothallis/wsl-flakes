@@ -20,7 +20,7 @@
 	    wsl.enable = true;
 
 	     environment.variables = {
-              EDITOR = "nvim";
+              EDITOR = "vim";
             };
 
 	    home-manager.useGlobalPkgs = true;
