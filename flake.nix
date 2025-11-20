@@ -8,27 +8,34 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = inputs@{ nixpkgs, nixos-wsl, home-manager, ... }: {
-    nixosConfigurations = {
-      nixos = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-	modules = [
-	  nixos-wsl.nixosModules.default
-	  home-manager.nixosModules.home-manager
-	  {
-	    system.stateVersion = "25.05";
-	    wsl.enable = true;
+  outputs =
+    inputs@{
+      nixpkgs,
+      nixos-wsl,
+      home-manager,
+      ...
+    }:
+    {
+      nixosConfigurations = {
+        nixos = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            nixos-wsl.nixosModules.default
+            home-manager.nixosModules.home-manager
+            {
+              system.stateVersion = "25.05";
+              wsl.enable = true;
 
-	     environment.variables = {
-              EDITOR = "vim";
-            };
+              environment.variables = {
+                EDITOR = "vim";
+              };
 
-	    home-manager.useGlobalPkgs = true;
-	    home-manager.useUserPackages = true;
-	    home-manager.users.nixos = ./home.nix;
-	  }
-	];
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.nixos = ./home.nix;
+            }
+          ];
+        };
       };
     };
-  };
 }
