@@ -73,6 +73,87 @@
                 o.clipboard = "unnamedplus"
 
         	vim.opt.numberwidth = 1
+
+		vim.diagnostic.config({
+		  virtual_text = true,
+		})
+		
+		local fmt_group = vim.api.nvim_create_augroup('autoformat_cmds', {clear = true})
+
+		local function setup_autoformat(event)
+		  local id = vim.tbl_get(event, 'data', 'client_id')
+		  local client = id and vim.lsp.get_client_by_id(id)
+		  if client == nil then
+		    return
+		  end
+
+		  vim.api.nvim_clear_autocmds({group = fmt_group, buffer = event.buf})
+
+		  local buf_format = function(e)
+		    vim.lsp.buf.format({
+		      bufnr = e.buf,
+		      async = false,
+		      timeout_ms = 10000,
+		    })
+		  end
+
+		  vim.api.nvim_create_autocmd('BufWritePre', {
+		    buffer = event.buf,
+		    group = fmt_group,
+		    desc = 'Format current buffer',
+		    callback = buf_format,
+		  })
+		end
+
+		vim.api.nvim_create_autocmd('LspAttach', {
+		  desc = 'Setup format on save',
+		  callback = setup_autoformat,
+		})
+
+		-- time it takes to trigger the `CursorHold` event
+		vim.opt.updatetime = 400
+
+		local function highlight_symbol(event)
+		  local id = vim.tbl_get(event, 'data', 'client_id')
+		  local client = id and vim.lsp.get_client_by_id(id)
+		  if client == nil or not client.supports_method('textDocument/documentHighlight') then
+		    return
+		  end
+
+		  local group = vim.api.nvim_create_augroup('highlight_symbol', {clear = false})
+
+		  vim.api.nvim_clear_autocmds({buffer = event.buf, group = group})
+
+		  vim.api.nvim_create_autocmd({'CursorHold', 'CursorHoldI'}, {
+		    group = group,
+		    buffer = event.buf,
+		    callback = vim.lsp.buf.document_highlight,
+		  })
+
+		  vim.api.nvim_create_autocmd({'CursorMoved', 'CursorMovedI'}, {
+		    group = group,
+		    buffer = event.buf,
+		    callback = vim.lsp.buf.clear_references,
+		  })
+		end
+
+		vim.api.nvim_create_autocmd('LspAttach', {
+		  desc = 'Setup highlight symbol',
+		  callback = highlight_symbol,
+		})
+
+		vim.api.nvim_create_autocmd('LspAttach', {
+		  desc = 'Enable inlay hints',
+		  callback = function(event)
+		    local id = vim.tbl_get(event, 'data', 'client_id')
+		    local client = id and vim.lsp.get_client_by_id(id)
+		    if client == nil or not client.supports_method('textDocument/inlayHint') then
+		      return
+		    end
+
+		    vim.lsp.inlay_hint.enable(true, {bufnr = event.buf})
+		  end,
+		})
       '';
 
       plugins = with pkgs.vimPlugins; [
@@ -87,6 +168,8 @@
             		})
 
             		vim.lsp.enable 'expert'
+
+			vim.lsp.enable('nixd')
           '';
         }
         {
@@ -218,6 +301,7 @@
     pkgs.ripgrep
     pkgs.tig
     pkgs.nodePackages.nodejs
+    pkgs.nixd
     pkgs.nixfmt-rfc-style
   ];
 
